@@ -1,0 +1,13 @@
+{% extends 'WSApp/index.html' %}
+{% block content %}
+    <h1 class="mb-4">Sigh In</h1>
+    <form id="add_post" method="post" class="ml-3">
+        {% csrf_token %}
+        <div class="col-4">
+            {{ form }}
+            <button type="submit" form="add_post" class="btn-lg btn-outline-primary float-right mt-4 mb-4">Sign In</button>
+        </div>
+
+    </form>
+{% endblock %}
+

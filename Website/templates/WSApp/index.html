@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+{#      <link rel="stylesheet" href="../../media/index/css/styles.css">#}
+      <title>Hello, world!</title>
+  </head>
+  <body>
+
+
+
+    <div class="container mt-5">
+
+    <ul class="nav nav-pills mb-4" style="width: 50%; display: inline-flex">
+      <li class="nav-item">
+          {% url 'home' as home %}
+        <a class="nav-link {% if home == request.path %} active {% endif %}" href="{{ home }}">Home</a>
+      </li>
+    {% if request.user.is_authenticated %}
+      <li class="nav-item">
+        {% url 'add' as create_new_page %}
+        <a class="nav-link {% if create_new_page == request.path %} active {% endif %}" href="{{ create_new_page}}">Create new post</a>
+      </li>
+    {% endif %}
+    </ul>
+    <ul class="nav nav-pills mb-4 justify-content-end" style="width: 50%; display: inline-flex; float: right;">
+        <li class="nav-item">   <p class="nav-link">{{ request.user }}</p></li>
+    {% if request.user.is_authenticated %}
+        <li class="nav-item ml-1">
+            {%  url 'logout' as logout %}
+            <a class="nav-link btn-danger" href="{{ logout }}">Log out</a>
+        </li>
+    {% else %}
+
+        <li class="nav-item">
+            {%  url 'login' as login %}
+            <a class="nav-link {% if login == request.path %} active {% endif %}" href={{ login }}>Log in</a>
+        </li>
+        <li class="nav-item">
+            {%  url 'auth' as auth %}
+            <a class="nav-link {% if auth == request.path %} active {% endif %}" href={{ auth }}>Sign in</a>
+        </li>
+    {% endif %}
+
+    </ul>
+    <hr>
+
+     {% block content %}
+        <h1 class="mb-5">All articles</h1>
+
+            {% for article in articles %}
+                <ul class="list-group mt-3 ml-3">
+                    <li class="list-group-item">
+                        <div>
+                            <b>{{ article.title }}</b>
+                            <span class="float-right "><a href="description/{{ article.id }}">Link to article</a></span>
+                            {% if request.user.is_authenticated %}
+                            <span class="float-right mr-4"><a href="update-post/{{ article.id }}">Edit</a></span>
+                            <span class="float-right mr-4"><a style="color: red" href="del-post/{{ article.id }}">Delete</a></span>
+                            {% endif %}
+                        </div>
+                        <div><i class="font-weight-lighter">Created date: {{ article.created_date |date:"d.m.o" }}</i></div>
+                        <span>{{ article.content| truncatechars:"20"}}</span>
+                        {% if article.files %}
+                            <div class="float-right font-weight-light">Attached file: <a href="{{ article.files.url }}">{{ article.files }}</a></div>
+                        {% endif %}
+                    </li>
+                </ul>
+            {% endfor %}
+     {% endblock %}
+    </div>
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+  </body>
+</html>
+
